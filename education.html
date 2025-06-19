@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education - My Resume</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <section class="first_section">
+        <nav class="navbar">
+            <div class="logo-container">
+                <div class="logo-image">
+                    <img src="images/logo.png" alt="logo" class="logo">
+                </div>
+                <span class="logo-text">Janviere Munezero</span>
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="skills.html">Skills</a></li>
+                <li><a href="education.html" class="active">Education</a></li>
+                <li><a href="experience.html">Experience</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </section>
+
+    <section class="main education-page">
+        <div class="title">
+            <h1>About <span class="highlight">Me</span></h1>
+        </div>
+        
+        <div class="profile-card">
+            <div class="profile-image">
+                <img src="images/IMG_20240909_160200_1.jpg" alt="Profile Picture">
+            </div>
+            <div class="profile-info">
+                <h2>Janviere Munezero</h2>
+                <div class="roles">
+                    <span>Frontend Developer</span>
+                    <span>Backend Developer</span>
+                    <span>Teacher</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="education-container">
+            <div class="education-section">
+                <div class="section-header" onclick="toggleSection('education-qualifications')">
+                    <h3>Education Qualification</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content" id="education-qualifications">
+                    <div class="qualification-item">
+                        <h4>Bachelor of Software Engineering</h4>
+                        <p>Institute: African Leadership University, Rwanda</p>
+                        <p>Session: 2024 - 25</p>
+                        <p>Result: Running (3rd Semester)</p>
+                    </div>
+                    <div class="qualification-item">
+                        <h4>Diploma in MPG (Mathematics Physics Geography)</h4>
+                        <p>Institute: Lycee Notre Dame de Citeaux, Rwanda</p>
+                        <p>Session: 2020 - 23</p>
+                        <p>Result: 60 out of 60</p>
+                    </div>
+                    <div class="qualification-item">
+                        <h4>Secondary School Certificate (SSC)</h4>
+                        <p>Institute: College Marie Rein de la paix, Rwanda</p>
+                        <p>Session: 2017 - 19</p>
+                        <p>Result: 15 out of 8</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="education-section">
+                <div class="section-header" onclick="toggleSection('short-courses')">
+                    <h3>Short Course</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content" id="short-courses">
+                    <div class="qualification-item">
+                        <h4>Teacher Training</h4>
+                        <p>Institute: IEE, Rwanda</p>
+                        <p>Session: 5 Months</p>
+                        <p>Result: Certificate</p>
+                    </div>
+                    <div class="qualification-item">
+                        <h4>Frontend Development</h4>
+                        <p>Institute: K-lab Academy, Rwanda</p>
+                        <p>Session: 1 Month</p>
+                        <p>Result: Certificate</p>
+                    </div>
+                    <div class="qualification-item">
+                        <h4>Professional Skills</h4>
+                        <p>Institute: ALX, Rwanda</p>
+                        <p>Session: 3 Months</p>
+                        <p>Result: Certificate</p>
+                    </div>
+                    <div class="qualification-item">
+                        <h4>Backend Development</h4>
+                        <p>Institute: ALX, Rwanda</p>
+                        <p>Session: 2 Months</p>
+                        <p>Result: Running (2nd Month)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="third_section">
+        <footer>
+            <p>Copyright 2025 All Rights Reserved</p>
+        </footer>
+    </section>
+</body>
+</html>
