@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experience - Munezero's Resume</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script defer src="script.js"></script>
     <style>
         .experience-container {
             max-width: 1200px;
@@ -162,7 +163,7 @@
 </head>
 <body>
     <section class="first_section">
-        <nav class="navbar">
+        <nav class="navbar container">
             <div class="logo-container">
                 <div class="logo-image">
                     <img src="images/logo.png" alt="logo" class="logo">
@@ -180,94 +181,97 @@
         </nav>
     </section>
 
-    <div class="experience-container">
-        <h1>Professional Experience</h1>
-
-        <!-- Software Development Experience -->
-        <div class="experience-card">
-            <div class="experience-image">
-                <img src="images/python.jpeg" alt="Software Development">
+    <main class="experience-page">
+        <div class="container">
+            <div class="title">
+                <h1>My <span class="highlight">Experience</span></h1>
             </div>
-            <div class="experience-content">
-                <h2 class="experience-title">Software Developer</h2>
-                <h3 class="experience-company">Tech Solutions Inc.</h3>
-                <p class="experience-date">January 2023 - Present</p>
-                <div class="experience-description">
-                    <p>Led the development of multiple full-stack applications using modern technologies and best practices. Collaborated with cross-functional teams to deliver high-quality software solutions.</p>
-                    <ul>
-                        <li>Developed and maintained multiple web applications</li>
-                        <li>Implemented responsive designs and user-friendly interfaces</li>
-                        <li>Optimized application performance and database queries</li>
-                    </ul>
+            <div class="experience-container">
+                <!-- Software Development Experience -->
+                <div class="experience-card">
+                    <div class="experience-image">
+                        <img src="images/python.jpeg" alt="Software Development">
+                    </div>
+                    <div class="experience-content">
+                        <h2 class="experience-title">Software Developer</h2>
+                        <h3 class="experience-company">Tech Solutions Inc.</h3>
+                        <p class="experience-date">January 2023 - Present</p>
+                        <div class="experience-description">
+                            <p>Led the development of multiple full-stack applications using modern technologies and best practices. Collaborated with cross-functional teams to deliver high-quality software solutions.</p>
+                            <ul>
+                                <li>Developed and maintained multiple web applications</li>
+                                <li>Implemented responsive designs and user-friendly interfaces</li>
+                                <li>Optimized application performance and database queries</li>
+                            </ul>
+                        </div>
+                        <div class="experience-skills">
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">React</span>
+                            <span class="skill-tag">SQL</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="experience-skills">
-                    <span class="skill-tag">Python</span>
-                    <span class="skill-tag">JavaScript</span>
-                    <span class="skill-tag">React</span>
-                    <span class="skill-tag">SQL</span>
+
+                <!-- Web Development Internship -->
+                <div class="experience-card">
+                    <div class="experience-image">
+                        <img src="images/javascript.jpg" alt="Web Development">
+                    </div>
+                    <div class="experience-content">
+                        <h2 class="experience-title">Web Development Intern</h2>
+                        <h3 class="experience-company">Digital Innovations Lab</h3>
+                        <p class="experience-date">June 2022 - December 2022</p>
+                        <div class="experience-description">
+                            <p>Gained hands-on experience in modern web development technologies and practices. Worked on real-world projects under senior developer supervision.</p>
+                            <ul>
+                                <li>Built responsive websites using HTML5, CSS3, and JavaScript</li>
+                                <li>Participated in code reviews and team meetings</li>
+                                <li>Learned version control with Git and GitHub</li>
+                            </ul>
+                        </div>
+                        <div class="experience-skills">
+                            <span class="skill-tag">HTML5</span>
+                            <span class="skill-tag">CSS3</span>
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">Git</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Frontend Development Project -->
+                <div class="experience-card">
+                    <div class="experience-image">
+                        <img src="images/HTML5.png" alt="Frontend Development">
+                    </div>
+                    <div class="experience-content">
+                        <h2 class="experience-title">Frontend Developer</h2>
+                        <h3 class="experience-company">Creative Web Studio</h3>
+                        <p class="experience-date">January 2022 - May 2022</p>
+                        <div class="experience-description">
+                            <p>Specialized in creating engaging user interfaces and implementing modern design patterns. Focused on performance optimization and cross-browser compatibility.</p>
+                            <ul>
+                                <li>Developed custom UI components and animations</li>
+                                <li>Implemented responsive layouts and mobile-first designs</li>
+                                <li>Optimized website performance and loading times</li>
+                            </ul>
+                        </div>
+                        <div class="experience-skills">
+                            <span class="skill-tag">HTML5</span>
+                            <span class="skill-tag">CSS3</span>
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">UI/UX</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Web Development Internship -->
-        <div class="experience-card">
-            <div class="experience-image">
-                <img src="images/javascript.jpg" alt="Web Development">
-            </div>
-            <div class="experience-content">
-                <h2 class="experience-title">Web Development Intern</h2>
-                <h3 class="experience-company">Digital Innovations Lab</h3>
-                <p class="experience-date">June 2022 - December 2022</p>
-                <div class="experience-description">
-                    <p>Gained hands-on experience in modern web development technologies and practices. Worked on real-world projects under senior developer supervision.</p>
-                    <ul>
-                        <li>Built responsive websites using HTML5, CSS3, and JavaScript</li>
-                        <li>Participated in code reviews and team meetings</li>
-                        <li>Learned version control with Git and GitHub</li>
-                    </ul>
-                </div>
-                <div class="experience-skills">
-                    <span class="skill-tag">HTML5</span>
-                    <span class="skill-tag">CSS3</span>
-                    <span class="skill-tag">JavaScript</span>
-                    <span class="skill-tag">Git</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Frontend Development Project -->
-        <div class="experience-card">
-            <div class="experience-image">
-                <img src="images/HTML5.png" alt="Frontend Development">
-            </div>
-            <div class="experience-content">
-                <h2 class="experience-title">Frontend Developer</h2>
-                <h3 class="experience-company">Creative Web Studio</h3>
-                <p class="experience-date">January 2022 - May 2022</p>
-                <div class="experience-description">
-                    <p>Specialized in creating engaging user interfaces and implementing modern design patterns. Focused on performance optimization and cross-browser compatibility.</p>
-                    <ul>
-                        <li>Developed custom UI components and animations</li>
-                        <li>Implemented responsive layouts and mobile-first designs</li>
-                        <li>Optimized website performance and loading times</li>
-                    </ul>
-                </div>
-                <div class="experience-skills">
-                    <span class="skill-tag">HTML5</span>
-                    <span class="skill-tag">CSS3</span>
-                    <span class="skill-tag">JavaScript</span>
-                    <span class="skill-tag">UI/UX</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    </main>
 
     <section class="third_section">
-        <footer>
+        <footer class="container">
             <p>2025 All Rights Reserved By Janviere Munezero</p>
         </footer>
     </section>
-
-    <script src="script.js"></script>
 </body>
 </html>

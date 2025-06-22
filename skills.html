@@ -5,10 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skills - Munezero's Resume</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-    <script defer src="config.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script defer src="script.js"></script>
     <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --accent-color: #00EEFF;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(0, 238, 255, 0.1);
+            --card-shadow: rgba(0, 238, 255, 0.1);
+            --hover-shadow: rgba(0, 238, 255, 0.2);
+            --icon-invert: 1;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --accent-color: #0066cc;
+            --card-bg: rgba(0, 0, 0, 0.05);
+            --card-border: rgba(0, 102, 204, 0.1);
+            --card-shadow: rgba(0, 102, 204, 0.1);
+            --hover-shadow: rgba(0, 102, 204, 0.2);
+            --icon-invert: 0.2;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: var(--text-color);
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px var(--hover-shadow);
+        }
+
+        .theme-toggle i {
+            font-size: 1.2rem;
+        }
+
         .skills-section {
             margin-top: 120px;
             padding: 0 20px;
@@ -105,6 +160,12 @@
             width: 50px;
             height: 50px;
             margin-bottom: 1rem;
+            filter: brightness(0) saturate(100%) invert(var(--icon-invert));
+            transition: transform 0.3s ease;
+        }
+
+        .skill-card:hover .language-icon {
+            transform: scale(1.1);
         }
 
         .language-name {
@@ -231,9 +292,14 @@
         }
     </style>
 </head>
-<body>
+<body id="skills">
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+        <span>Toggle Theme</span>
+    </button>
+
     <section class="first_section">
-        <nav class="navbar">
+        <nav class="navbar container">
             <div class="logo-container">
                 <div class="logo-image">
                     <img src="images/logo.png" alt="logo" class="logo">
@@ -251,87 +317,182 @@
         </nav>
     </section>
 
-    <section class="skills-section">
-        <div class="skills-container">
+    <main class="skills-section">
+        <div class="skills-container container">
             <div class="section-title">
                 <h1>My <span class="highlight">Skills</span></h1>
             </div>
             
             <div class="skills-content">
-                <!-- Hard Skills Column -->
+                <!-- Technical Skills Column -->
                 <div class="hard-skills">
-                    <h2>Hard Skills</h2>
-                    <div class="skills-grid" id="hardSkills">
-                        <!-- Skills will be dynamically populated from GitHub -->
-                        <div class="loading-spinner">
-                            <div class="spinner"></div>
-                            <p>Loading skills from GitHub...</p>
+                    <h2>Technical Skills</h2>
+                    <div class="skills-grid">
+                        <!-- Frontend Development -->
+                        <div class="skill-category">
+                            <h3><i class="fas fa-code"></i> Frontend Development</h3>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>HTML5</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>CSS3</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>JavaScript</span>
+                                    <span>80%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Backend Development -->
+                        <div class="skill-category">
+                            <h3><i class="fas fa-server"></i> Backend Development</h3>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>Python</span>
+                                    <span>75%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>MySQL</span>
+                                    <span>70%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 70%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tools & Technologies -->
+                        <div class="skill-category">
+                            <h3><i class="fas fa-tools"></i> Tools & Technologies</h3>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>Git & GitHub</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>VS Code</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>Responsive Design</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 85%"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Soft Skills Column -->
                 <div class="soft-skills">
-                    <h2>Soft Skills</h2>
+                    <h2>Professional Skills</h2>
                     <div class="skills-list">
                         <div class="skill-item">
-                            <h3>Communication</h3>
+                            <h3><i class="fas fa-lightbulb"></i> Problem Solving</h3>
                             <div class="skill-description">
-                                <p>Excellent written and verbal communication skills demonstrated through team projects and presentations. Ability to explain complex technical concepts in simple terms and facilitate effective team discussions.</p>
+                                <p>Strong analytical and problem-solving abilities, with a track record of finding innovative solutions to complex technical challenges.</p>
                             </div>
                         </div>
                         <div class="skill-item">
-                            <h3>Problem Solving</h3>
+                            <h3><i class="fas fa-comments"></i> Communication</h3>
                             <div class="skill-description">
-                                <p>Strong analytical and problem-solving abilities shown in complex programming challenges. Proven track record of breaking down large problems into manageable components and finding innovative solutions.</p>
+                                <p>Excellent verbal and written communication skills, able to explain complex technical concepts to non-technical stakeholders.</p>
                             </div>
                         </div>
                         <div class="skill-item">
-                            <h3>Team Collaboration</h3>
+                            <h3><i class="fas fa-users"></i> Team Collaboration</h3>
                             <div class="skill-description">
-                                <p>Effective team player with experience in collaborative development environments. Skilled in version control, code review, and agile methodologies to ensure smooth team coordination.</p>
+                                <p>Experienced in working with cross-functional teams, contributing to a positive team environment and achieving shared goals.</p>
                             </div>
                         </div>
                         <div class="skill-item">
-                            <h3>Time Management</h3>
+                            <h3><i class="fas fa-clock"></i> Time Management</h3>
                             <div class="skill-description">
-                                <p>Proven ability to manage multiple projects and meet deadlines efficiently. Experience in prioritizing tasks, setting realistic timelines, and delivering high-quality work under pressure.</p>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <h3>Adaptability</h3>
-                            <div class="skill-description">
-                                <p>Quick learner who adapts well to new technologies and methodologies. Demonstrated ability to pivot strategies based on project needs and embrace change in fast-paced environments.</p>
+                                <p>Efficient in managing multiple projects and deadlines while maintaining high-quality standards.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
     <section class="third_section">
-        <footer>
+        <footer class="container">
             <p>2025 All Rights Reserved By Janviere Munezero</p>
         </footer>
     </section>
 
     <script>
-        // Add click event listeners to soft skill items
-        document.querySelectorAll('.skill-item h3').forEach(header => {
-            header.addEventListener('click', () => {
-                const item = header.parentElement;
-                const wasActive = item.classList.contains('active');
-                
-                // Close all other items
-                document.querySelectorAll('.skill-item').forEach(otherItem => {
-                    otherItem.classList.remove('active');
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.documentElement;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            // Update icon
+            const icon = document.querySelector('.theme-toggle i');
+            icon.className = newTheme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const icon = document.querySelector('.theme-toggle i');
+            icon.className = savedTheme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
+
+            // Add click handlers for skill items
+            document.querySelectorAll('.skill-item h3').forEach(header => {
+                header.addEventListener('click', () => {
+                    const item = header.parentElement;
+                    const description = item.querySelector('.skill-description');
+                    if (description) {
+                        item.classList.toggle('active');
+                        if (item.classList.contains('active')) {
+                            description.style.maxHeight = description.scrollHeight + 'px';
+                        } else {
+                            description.style.maxHeight = '0';
+                        }
+                    }
                 });
-                
-                // Toggle the clicked item
-                if (!wasActive) {
-                    item.classList.add('active');
-                }
             });
         });
     </script>

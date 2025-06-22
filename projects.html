@@ -3,15 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects - My Resume</title>
+    <title>Projects - Munezero's Resume</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-    <script defer src="config.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script defer src="github-integration.js"></script>
     <script defer src="script.js"></script>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --accent-color: #00EEFF;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(0, 238, 255, 0.1);
+            --card-shadow: rgba(0, 238, 255, 0.1);
+            --hover-shadow: rgba(0, 238, 255, 0.2);
+            --icon-invert: 1;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --accent-color: #0066cc;
+            --card-bg: rgba(0, 0, 0, 0.05);
+            --card-border: rgba(0, 102, 204, 0.1);
+            --card-shadow: rgba(0, 102, 204, 0.1);
+            --hover-shadow: rgba(0, 102, 204, 0.2);
+            --icon-invert: 0.2;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: var(--text-color);
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px var(--hover-shadow);
+        }
+
+        .projects-section {
+            margin-top: 120px;
+            padding: 0 20px;
+        }
+
+        .projects-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h1 {
+            font-size: 2.5rem;
+            color: var(--text-color);
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-color);
+            animation: shimmer 2s infinite;
+        }
+
+        .highlight {
+            color: var(--accent-color);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 6px var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px var(--hover-shadow);
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .project-description {
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .project-language {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .language-icon {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) saturate(100%) invert(var(--icon-invert));
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover .language-icon {
+            transform: scale(1.1);
+        }
+
+        .project-stats {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .project-link {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+        }
+
+        .view-link {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .clone-link {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .project-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px var(--hover-shadow);
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--card-border);
+            border-left-color: var(--accent-color);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            animation: spin 1s linear infinite;
+        }
+
+        .error-message {
+            text-align: center;
+            color: #ff4444;
+            padding: 2rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title h1 {
+                font-size: 2rem;
+            }
+
+            .project-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+        <span>Toggle Theme</span>
+    </button>
+
     <section class="first_section">
-        <nav class="navbar">
+        <nav class="navbar container">
             <div class="logo-container">
                 <div class="logo-image">
                     <img src="images/logo.png" alt="logo" class="logo">
@@ -29,27 +269,117 @@
         </nav>
     </section>
 
-    <section class="projects-section">
-        <div class="projects-container">
-            <div class="section-title">
+    <main class="projects-section">
+        <div class="container">
+            <div class="title">
                 <h1>My <span class="highlight">Projects</span></h1>
-                <p>Discover my latest work from GitHub</p>
             </div>
-            
-            <div class="projects-grid" id="projectsGrid">
-                <!-- Projects will be dynamically populated from GitHub -->
-                <div class="loading-spinner">
-                    <div class="spinner"></div>
-                    <p>Loading projects from GitHub...</p>
+            <div class="projects-container">
+                <div id="github-projects" class="projects-grid">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>Loading projects from GitHub...</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
     <section class="third_section">
-        <footer>
-            <p>Copyright 2025 All Rights Reserved</p>
+        <footer class="container">
+            <p>2025 All Rights Reserved By Janviere Munezero</p>
         </footer>
     </section>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.documentElement;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            // Update icon
+            const icon = document.querySelector('.theme-toggle i');
+            icon.className = newTheme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const icon = document.querySelector('.theme-toggle i');
+            icon.className = savedTheme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
+        });
+
+        // Initialize GitHub projects
+        async function initializeGitHubProjects() {
+            const projectsContainer = document.getElementById('github-projects');
+            try {
+                const projects = await window.GitHubAPI.fetchProjects();
+                
+                // Clear loading spinner
+                projectsContainer.innerHTML = '';
+                
+                if (projects.length === 0) {
+                    projectsContainer.innerHTML = `
+                        <div class="error-message">
+                            <p>No projects found.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Create project cards
+                projects.forEach(project => {
+                    const card = document.createElement('div');
+                    card.className = 'project-card';
+                    card.innerHTML = `
+                        <h3 class="project-title">${project.name}</h3>
+                        <p class="project-description">${project.description}</p>
+                        <div class="project-meta">
+                            <div class="project-language">
+                                <img src="${window.GitHubAPI.getLanguageIcon(project.language)}" 
+                                     alt="${project.language}" 
+                                     class="language-icon">
+                                <span>${project.language || 'Various'}</span>
+                            </div>
+                            <div class="project-stats">
+                                <span>⭐ ${project.stars}</span>
+                                <span>🔄 ${project.forks}</span>
+                            </div>
+                        </div>
+                        <div class="project-links">
+                            <a href="${project.url}" target="_blank" class="project-link view-link">View Project</a>
+                            <a href="${project.url}.git" class="project-link clone-link" 
+                               onclick="copyCloneUrl('${project.url}.git')">Clone Project</a>
+                        </div>
+                    `;
+                    projectsContainer.appendChild(card);
+                });
+            } catch (error) {
+                projectsContainer.innerHTML = `
+                    <div class="error-message">
+                        <p>Error loading projects. Please try again later.</p>
+                        <p class="error-details">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Function to copy clone URL to clipboard
+        function copyCloneUrl(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Clone URL copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy URL:', err);
+                alert('Failed to copy URL. Please try again.');
+            });
+        }
+
+        // Initialize projects when page loads
+        initializeGitHubProjects();
+    </script>
 </body>
 </html>

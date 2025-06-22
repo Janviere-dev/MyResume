@@ -7,6 +7,8 @@ let speed = 150;
 const element = document.querySelector(".typing-text");
 
 function typeEffect() {
+  if (!element) return; // Add early return if element doesn't exist
+  
   const current = words[wordIndex];
   
   if (isDeleting) {
@@ -31,7 +33,10 @@ function typeEffect() {
   setTimeout(typeEffect, speed);
 }
 
-typeEffect();
+// Only start the typing effect if the element exists
+if (element) {
+  typeEffect();
+}
 
 // Function to toggle education sections
 function toggleSection(sectionId) {
