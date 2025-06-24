@@ -66,7 +66,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Form Validation
+// Add this function at the beginning for page transitions
+function fadeOutAndRedirect(url) {
+    document.body.style.opacity = '0';
+    setTimeout(() => {
+        window.location.href = url;
+    }, 300);
+}
+
+// Update the form submission handler
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('contactForm');
     if (!form) return;
@@ -204,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Form submission
     form.addEventListener('submit', function(e) {
-        e.preventDefault(); // Always prevent default first
+        e.preventDefault();
         clearAllErrors();
 
         let isValid = true;
@@ -221,7 +229,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         if (!isValid) {
-            // Scroll to and focus the first invalid field
             if (firstInvalidField) {
                 firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 firstInvalidField.focus();
@@ -229,344 +236,45 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-        // If all valid, show success popup
+        // If all valid, show loading state and redirect
         const submitBtn = form.querySelector('.submit-btn');
-        const successPopup = document.getElementById('successPopup');
-        
-        // Disable submit button and show loading state
         submitBtn.disabled = true;
         submitBtn.textContent = 'Sending...';
-        
-        // Simulate form submission delay
+
+        // Simulate form submission (replace with actual form submission if needed)
         setTimeout(() => {
-            // Show success popup
-            successPopup.classList.add('show');
-            
-            // Reset button
-            submitBtn.classList.add('submit-success');
-            submitBtn.textContent = 'Sent Successfully!';
-            
-            // Hide popup and reset form after 3 seconds
-            setTimeout(() => {
-                successPopup.classList.remove('show');
-                form.reset();
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('submit-success');
-                submitBtn.textContent = 'Submit';
-                clearAllErrors();
-            }, 3000);
+            // Store form data in localStorage for thank you page
+            const formData = {
+                name: form.querySelector('#firstName').value + ' ' + form.querySelector('#lastName').value,
+                email: form.querySelector('#email').value
+            };
+            localStorage.setItem('formData', JSON.stringify(formData));
+
+            // Fade out and redirect
+            fadeOutAndRedirect('thank-you.html');
         }, 1000);
+    });
+
+    // Add page transition effect for all links
+    document.querySelectorAll('a').forEach(link => {
+        if (link.href && link.href.startsWith(window.location.origin)) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                fadeOutAndRedirect(this.href);
+            });
+        }
     });
 });
 
-// GitHub API Configuration
-const GITHUB_CONFIG = {
-    username: 'Janviere-dev',
-    // Token will be set via environment variable or configuration
-    token: '', // DO NOT hardcode the token here
-    cacheExpiry: 3600000, // 1 hour in milliseconds
-};
-
-// Cache helpers
-function getFromCache(key) {
-    const cached = localStorage.getItem(key);
-    if (!cached) return null;
-    
-    const { data, timestamp } = JSON.parse(cached);
-    if (Date.now() - timestamp > GITHUB_CONFIG.cacheExpiry) {
-        localStorage.removeItem(key);
-        return null;
+// Add this code for the thank you page
+if (document.body.classList.contains('thank-you-page')) {
+    const formData = JSON.parse(localStorage.getItem('formData') || '{}');
+    const nameSpan = document.querySelector('.user-name');
+    if (nameSpan && formData.name) {
+        nameSpan.textContent = formData.name;
     }
-    return data;
-}
-
-function setCache(key, data) {
-    localStorage.setItem(key, JSON.stringify({
-        data,
-        timestamp: Date.now()
-    }));
-}
-
-// GitHub API helpers
-async function fetchGitHubAPI(endpoint) {
-    console.log(`Fetching GitHub API endpoint: ${endpoint}`);
-    const headers = {
-        'Accept': 'application/vnd.github.v3+json'
-    };
-    
-    if (window.GITHUB_CONFIG && window.GITHUB_CONFIG.token) {
-        console.log('Using GitHub token for authentication');
-        headers['Authorization'] = `Bearer ${window.GITHUB_CONFIG.token}`;
-    } else {
-        console.warn('No GitHub token found! This will limit the API rate.');
-    }
-    
-    try {
-        console.log('Making API request...');
-        const response = await fetch(`https://api.github.com${endpoint}`, { headers });
-        
-        console.log('Response status:', response.status);
-        console.log('Rate limit remaining:', response.headers.get('x-ratelimit-remaining'));
-        
-        if (!response.ok) {
-            if (response.status === 403 || response.status === 429) {
-                const resetTime = response.headers.get('x-ratelimit-reset');
-                const waitTime = resetTime ? new Date(resetTime * 1000) - new Date() : 3600000;
-                const errorMessage = `Rate limit exceeded. Try again in ${Math.ceil(waitTime / 1000 / 60)} minutes.`;
-                console.error(errorMessage);
-                throw new Error(errorMessage);
-            }
-            const errorText = await response.text();
-            console.error('GitHub API error response:', errorText);
-            throw new Error(`GitHub API error: ${response.status} - ${errorText}`);
-        }
-        
-        const data = await response.json();
-        console.log('API response data:', data);
-        return data;
-    } catch (error) {
-        console.error('Error in fetchGitHubAPI:', error);
-        throw error;
-    }
-}
-
-// GitHub Skills Integration
-async function fetchGitHubSkills() {
-    console.log('Starting fetchGitHubSkills...');
-    const hardSkillsContainer = document.getElementById('hardSkills');
-    if (!hardSkillsContainer) {
-        console.error('Could not find hardSkills container!');
-        return;
-    }
-    
-    try {
-        // Try to get cached data first
-        const cachedSkills = getFromCache('github_skills');
-        if (cachedSkills) {
-            console.log('Using cached skills data');
-            renderSkills(cachedSkills);
-            return;
-        }
-        
-        console.log('Fetching fresh skills data...');
-        const repos = await fetchGitHubAPI(`/users/${GITHUB_CONFIG.username}/repos`);
-        console.log(`Found ${repos.length} repositories`);
-        
-        // Count languages used across repositories
-        const languageCounts = {};
-        console.log('Fetching language data for each repository...');
-        const languagePromises = repos.map(repo => {
-            console.log(`Fetching languages for ${repo.name}...`);
-            return fetchGitHubAPI(repo.languages_url.replace('https://api.github.com', ''))
-                .then(languages => {
-                    console.log(`Languages for ${repo.name}:`, languages);
-                    return languages;
-                })
-                .catch(error => {
-                    console.error(`Error fetching languages for ${repo.name}:`, error);
-                    return {};
-                });
-        });
-        
-        const languagesData = await Promise.all(languagePromises);
-        console.log('All language data fetched:', languagesData);
-        
-        languagesData.forEach(languages => {
-            Object.keys(languages).forEach(lang => {
-                languageCounts[lang] = (languageCounts[lang] || 0) + 1;
-            });
-        });
-        
-        console.log('Final language counts:', languageCounts);
-        
-        // Cache the results
-        setCache('github_skills', languageCounts);
-        
-        // Render the skills
-        renderSkills(languageCounts);
-        
-    } catch (error) {
-        console.error('Error in fetchGitHubSkills:', error);
-        hardSkillsContainer.innerHTML = `
-            <div class="error-message">
-                <p>${error.message}</p>
-                <button onclick="fetchGitHubSkills()" class="retry-button">Retry</button>
-            </div>
-        `;
-    }
-}
-
-function renderSkills(languageCounts) {
-    const hardSkillsContainer = document.getElementById('hardSkills');
-    hardSkillsContainer.innerHTML = '';
-    
-    Object.entries(languageCounts)
-        .sort((a, b) => b[1] - a[1])
-        .forEach(([language, count]) => {
-            const skillCard = document.createElement('div');
-            skillCard.className = 'skill-card';
-            
-            const languageIcon = getLanguageIcon(language);
-            
-            skillCard.innerHTML = `
-                <img src="${languageIcon}" alt="${language}" class="language-icon">
-                <div class="language-name">${language}</div>
-                <div class="repo-count">${count} ${count === 1 ? 'repo' : 'repos'}</div>
-            `;
-            
-            hardSkillsContainer.appendChild(skillCard);
-        });
-}
-
-// Add these functions to script.js if they're not already present
-
-async function fetchGitHubAPI(endpoint) {
-    console.log(`Fetching GitHub API endpoint: ${endpoint}`);
-    const response = await fetch(`https://api.github.com${endpoint}`);
-    if (!response.ok) {
-        throw new Error(`GitHub API error: ${response.status}`);
-    }
-    return response.json();
-}
-
-// ...existing code...
-async function fetchGitHubSkills() {
-    const username = "Janviere-dev";
-    const hardSkillsContainer = document.getElementById('hardSkills');
-    hardSkillsContainer.innerHTML = "Loading skills from GitHub...";
-
-    try {
-        const reposResponse = await fetch(`https://api.github.com/users/${username}/repos`);
-        const repos = await reposResponse.json();
-
-        const languageSet = new Set();
-        for (const repo of repos) {
-            const langResponse = await fetch(repo.languages_url);
-            const languages = await langResponse.json();
-            Object.keys(languages).forEach(lang => languageSet.add(lang));
-        }
-
-        if (languageSet.size === 0) {
-            hardSkillsContainer.innerHTML = "No skills found on GitHub.";
-            return;
-        }
-
-        hardSkillsContainer.innerHTML = "";
-        languageSet.forEach(lang => {
-            const skillDiv = document.createElement('div');
-            skillDiv.className = "skill-card";
-            skillDiv.textContent = lang;
-            hardSkillsContainer.appendChild(skillDiv);
-        });
-    } catch (error) {
-        hardSkillsContainer.innerHTML = "Failed to load skills from GitHub.";
-    }
-}
-
-// Call the function when the page loads
-window.addEventListener('DOMContentLoaded', fetchGitHubSkills);
-// ...existing code...
-
-// GitHub Projects Integration
-async function fetchGitHubProjects() {
-    const projectsContainer = document.getElementById('projectsGrid');
-    if (!projectsContainer) return;
-    
-    try {
-        // Try to get cached data first
-        const cachedProjects = getFromCache('github_projects');
-        if (cachedProjects) {
-            renderProjects(cachedProjects);
-            return;
-        }
-        
-        const repos = await fetchGitHubAPI(`/users/${GITHUB_CONFIG.username}/repos?sort=updated&direction=desc`);
-        
-        // Cache the results
-        setCache('github_projects', repos);
-        
-        // Render the projects
-        renderProjects(repos);
-        
-    } catch (error) {
-        projectsContainer.innerHTML = `
-            <div class="error-message">
-                <p>${error.message}</p>
-                <button onclick="fetchGitHubProjects()" class="retry-button">Retry</button>
-            </div>
-        `;
-        console.error('Error fetching GitHub projects:', error);
-    }
-}
-
-function renderProjects(repos) {
-    const projectsContainer = document.getElementById('projectsGrid');
-    projectsContainer.innerHTML = '';
-    
-    repos.forEach(repo => {
-        const projectCard = document.createElement('div');
-        projectCard.className = 'project-card';
-        
-        const description = repo.description || 'No description available';
-        const language = repo.language || 'Other';
-        const updatedAt = new Date(repo.updated_at).toLocaleDateString();
-        
-        projectCard.innerHTML = `
-            <div class="project-header">
-                <h3 class="project-title">
-                    <img src="images/github-logo.png" alt="GitHub">
-                    <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">${repo.name}</a>
-                </h3>
-                <p class="project-description">${description}</p>
-            </div>
-            <div class="project-meta">
-                <div class="project-language">
-                    <span class="language-dot ${language}"></span>
-                    ${language}
-                </div>
-                <div class="project-stats">
-                    <span class="project-stat">
-                        <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor">
-                            <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/>
-                        </svg>
-                        ${repo.stargazers_count}
-                    </span>
-                    <span class="project-stat">
-                        <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor">
-                            <path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"/>
-                        </svg>
-                        ${repo.forks_count}
-                    </span>
-                    <span class="project-stat">Updated: ${updatedAt}</span>
-                </div>
-            </div>
-        `;
-        
-        projectsContainer.appendChild(projectCard);
-    });
-}
-
-// Helper function to get language icons
-function getLanguageIcon(language) {
-    const icons = {
-        JavaScript: 'images/javascript.jpg',
-        Python: 'images/python.jpeg',
-        HTML: 'images/HTML5.png',
-        CSS: 'images/css.webp',
-        // Add more language icons as needed
-    };
-    
-    return icons[language] || 'images/logo.png'; // Default to logo if no specific icon
-}
-
-// Initialize skills page if we're on it
-if (document.querySelector('.skills-section')) {
-    fetchGitHubSkills();
-}
-
-// Initialize projects page if we're on it
-if (document.querySelector('.projects-section')) {
-    fetchGitHubProjects();
+    // Clear the form data
+    localStorage.removeItem('formData');
 }
 
 // Soft Skills Toggle
@@ -596,6 +304,75 @@ function initializeSoftSkills() {
 
 // Initialize soft skills if we're on the skills page
 if (document.querySelector('.skills-section')) {
-    fetchGitHubSkills();
     initializeSoftSkills();
 }
+
+// Project Card Flip Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const projectCards = document.querySelectorAll('.project-card');
+    
+    projectCards.forEach(card => {
+        // Flip card when clicking on the image container
+        const imageContainer = card.querySelector('.project-image-container');
+        if (imageContainer) {
+            imageContainer.addEventListener('click', () => {
+                card.classList.add('flipped');
+            });
+        }
+        
+        // Flip back when clicking the back button
+        const backButton = card.querySelector('.back-to-image');
+        if (backButton) {
+            backButton.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent event from bubbling up
+                card.classList.remove('flipped');
+            });
+        }
+    });
+});
+
+// Add these functions at the beginning of the file
+document.addEventListener('DOMContentLoaded', function() {
+    // Mobile menu functionality
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navMenu = document.querySelector('.navbar ul');
+
+    if (mobileMenuBtn && navMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenuBtn.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileMenuBtn.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
+        });
+
+        // Close menu when clicking a link
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenuBtn.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+    }
+
+    // Page transition
+    document.querySelectorAll('a').forEach(link => {
+        if (link.href && link.href.startsWith(window.location.origin)) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = this.href;
+                document.body.classList.add('page-transition');
+                setTimeout(() => {
+                    window.location.href = target;
+                }, 300);
+            });
+        }
+    });
+});
+
+

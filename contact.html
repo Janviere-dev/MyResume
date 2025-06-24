@@ -5,9 +5,506 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact - Munezero's Resume</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <script defer src="script.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Add EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // https://dashboard.emailjs.com/admin/account
+            emailjs.init("YOUR_PUBLIC_KEY");
+        })();
+    </script>
+    <style>
+        .second_section {
+            padding: 20px 0;
+            min-height: calc(100vh - 200px);
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title {
+            text-align: center;
+            margin: 20px 0 50px 0;
+            position: relative;
+            width: 100%;
+        }
+
+        .title h2 {
+            font-size: 3rem;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .title h2 {
+            position: relative;
+            display: inline-block;
+        }
+
+        .title h2 span {
+            color: #00EEFF;
+        }
+
+        .title h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 100%;
+            height: 4px;
+            background: #00EEFF;
+        }
+
+        .contact-intro {
+            max-width: 600px;
+            margin: 20px auto 0;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+        }
+
+        .contact-content {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        .contact-info {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            background: rgba(0, 238, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 238, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .info-icon svg {
+            width: 20px;
+            height: 20px;
+            color: #00EEFF;
+        }
+
+        .info-text {
+            flex: 1;
+        }
+
+        .info-text h3 {
+            margin: 0 0 5px;
+            color: #00EEFF;
+            font-size: 1.1rem;
+        }
+
+        .info-text p {
+            margin: 0;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        .info-text p + p {
+            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+        }
+
+        /* Status text styling */
+        .info-item:nth-last-child(1) .info-text p {
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .social-links {
+            margin-top: 30px;
+        }
+
+        .social-links h3 {
+            color: #00EEFF;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .social-icon:hover {
+            background: rgba(0, 238, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .social-icon::after {
+            content: attr(title);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 10px;
+            background: rgba(0, 238, 255, 0.9);
+            color: #000;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover::after {
+            opacity: 1;
+            visibility: visible;
+            bottom: -25px;
+        }
+
+        .social-icon img {
+            width: 20px;
+            height: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover img {
+            transform: scale(1.2);
+        }
+
+        /* Social Media Icons Custom Styling */
+        /* GitHub styling */
+        .social-icon[href*="github"] {
+            background: #24292e;
+            opacity: 0.8;
+        }
+        
+        .social-icon[href*="github"]:hover {
+            opacity: 1;
+            box-shadow: 0 0 15px rgba(36, 41, 46, 0.7);
+        }
+
+        .social-icon[href*="github"] img {
+            filter: brightness(0) invert(1);
+        }
+
+        /* Instagram styling */
+        .social-icon[href*="instagram"] {
+            overflow: visible;
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+            opacity: 0.8;
+            z-index: 1;
+            position: relative;
+        }
+
+        .social-icon[href*="instagram"]:hover {
+            opacity: 1;
+            box-shadow: 0 0 15px rgba(225, 48, 108, 0.7);
+            transform: translateY(-5px) rotate(5deg);
+        }
+
+        .social-icon[href*="instagram"] img {
+            filter: brightness(0) invert(1);
+            pointer-events: none; /* Makes sure the image doesn't interfere with clicking */
+        }
+
+        .social-icon[href*="instagram"]::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            z-index: -1;
+            cursor: pointer;
+        }
+
+        /* LinkedIn styling */
+        .social-icon[href*="linkedin"] {
+            background: #0077B5;
+            opacity: 0.8;
+        }
+
+        .social-icon[href*="linkedin"]:hover {
+            opacity: 1;
+            box-shadow: 0 0 15px rgba(0, 119, 181, 0.7);
+        }
+
+        .social-icon[href*="linkedin"] img {
+            filter: brightness(0) invert(1);
+        }
+
+        /* Common hover animation */
+        .social-icon:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .contact-form {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+        }
+
+        .contact-form .title {
+            text-align: center;
+            margin: 0 0 30px 0;
+            position: relative;
+        }
+
+        .contact-form .title h2 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .contact-form .title h2 span {
+            color: #00EEFF;
+            position: relative;
+            display: inline-block;
+        }
+
+        .contact-form .title h2 span::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 100%;
+            height: 4px;
+            background: #00EEFF;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 238, 255, 0.1);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00EEFF;
+            background: rgba(0, 238, 255, 0.05);
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            font-size: 0.8rem;
+            color: #ff4444;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .form-group.error .form-hint {
+            opacity: 1;
+        }
+
+        .form-group.error input,
+        .form-group.error textarea {
+            border-color: #ff4444;
+        }
+
+        .submit-btn {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px var(--hover-shadow);
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        @keyframes spin {
+            to { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .contact-content {
+                flex-direction: column;
+            }
+
+            .contact-info,
+            .contact-form {
+                width: 100%;
+            }
+        }
+
+        /* Success message styling */
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            padding: 1rem;
+            border-radius: 5px;
+            color: #00ff00;
+            font-family: 'Montserrat', sans-serif;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .success-message.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* New error notification styles */
+        .error-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid #ff4444;
+            padding: 1rem;
+            border-radius: 5px;
+            color: #ff4444;
+            font-family: 'Montserrat', sans-serif;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.3s ease;
+            max-width: 300px;
+        }
+
+        .error-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .error-notification h3 {
+            color: #ff4444;
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        .error-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .error-list li {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .error-list li:before {
+            content: "•";
+            color: #ff4444;
+            margin-right: 0.5rem;
+        }
+
+        .error-list li:last-child {
+            margin-bottom: 0;
+        }
+    </style>
 </head>
 <body>
     <section class="first_section">
@@ -18,6 +515,11 @@
                 </div>
                 <span class="logo-text">Janviere Munezero</span>
             </div>
+            <button class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="skills.html">Skills</a></li>
@@ -29,76 +531,595 @@
         </nav>
     </section>
 
-    <main class="contact-section">
-        <div class="container">
+    <section class="second_section">
+        <div class="contact-container">
             <div class="title">
-                <h1>Contact <span class="highlight">Me</span></h1>
+                <h2>My <span>Contact</span></h2>
+                <p class="contact-intro">I am always open to discussing new skills, opportunities in tech world, partnerships and more so mentorship</p>
             </div>
-            <div class="contact-container">
+            <div class="contact-content">
                 <div class="contact-info">
-                    <div class="contact-logo">
-                        <img src="images/logo.png" alt="Logo" class="brand-logo">
-                    </div>
-                    <p class="contact-description">
-                        I am professional Web designer. I have designed more than 50 web template for my client. You can hire me for design your personal, business or other website. Contact me and tell me. I completed your work with your full satisfaction.
-                    </p>
+                    <ul class="info-list">
+                        <li class="info-item">
+                            <div class="info-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                            </div>
+                            <div class="info-text">
+                                <h3>Phone</h3>
+                                <p>+250 793838790</p>
+                            </div>
+                        </li>
+                        <li class="info-item">
+                            <div class="info-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="info-text">
+                                <h3>Email</h3>
+                                <p>j.munezero@alustudent.com</p>
+                            </div>
+                        </li>
+                        <li class="info-item">
+                            <div class="info-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                            </div>
+                            <div class="info-text">
+                                <h3>Location</h3>
+                                <p>Kigali, Rwanda</p>
+                            </div>
+                        </li>
+                        <li class="info-item">
+                            <div class="info-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                                </svg>
+                            </div>
+                            <div class="info-text">
+                                <h3>Working Hours</h3>
+                                <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+                                <p>Weekend: Available for urgent matters</p>
+                            </div>
+                        </li>
+                        <li class="info-item">
+                            <div class="info-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                                </svg>
+                            </div>
+                            <div class="info-text">
+                                <h3>Current Status</h3>
+                                <p>Open to Job Opportunities</p>
+                                <p>Full-time positions & Project-based work</p>
+                            </div>
+                        </li>
+                    </ul>
+
                     <div class="social-links">
-                        <a href="#" class="social-icon phone"><i class="fas fa-phone"></i></a>
-                        <a href="#" class="social-icon email"><i class="fas fa-envelope"></i></a>
-                        <a href="#" class="social-icon linkedin"><img src="images/linkedin.svg" alt="LinkedIn"></a>
-                        <a href="#" class="social-icon location"><i class="fas fa-map-marker-alt"></i></a>
-                        <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
+                        <h3>Connect With Me</h3>
+                        <div class="social-icons">
+                            <a href="https://github.com/Janviere-dev" 
+                               target="_blank" 
+                               class="social-icon" 
+                               title="@Janviere-dev" 
+                               rel="noopener noreferrer"
+                               aria-label="Visit my GitHub profile">
+                                <img src="images/github-logo.png" alt="GitHub">
+                            </a>
+                            <a href="https://www.instagram.com/__janviere/" 
+                               target="_blank" 
+                               class="social-icon" 
+                               title="@__janviere" 
+                               rel="noopener noreferrer"
+                               aria-label="Follow me on Instagram">
+                                <img src="images/instagram-new.png" alt="Instagram">
+                            </a>
+                            <a href="https://www.linkedin.com/in/munezero-janviere-a5375b300/" 
+                               target="_blank" 
+                               class="social-icon" 
+                               title="Munezero Janviere" 
+                               rel="noopener noreferrer"
+                               aria-label="Connect with me on LinkedIn">
+                                <img src="images/linkedin.svg" alt="LinkedIn">
+                            </a>
+                        </div>
                     </div>
                 </div>
+
                 <div class="contact-form">
-                    <h2>Contact <span class="highlight">Me</span></h2>
-                    <form id="contactForm" novalidate>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
-                                <div class="error-message" id="firstNameError"></div>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
-                                <div class="error-message" id="lastNameError"></div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <input type="tel" id="phone" name="phone" placeholder="Phone (e.g., +250 780 123 456)" required>
-                                <div class="error-message" id="phoneError"></div>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" id="subject" name="subject" placeholder="Subject" required>
-                                <div class="error-message" id="subjectError"></div>
-                            </div>
+                    <form id="contactForm" action="https://formsubmit.co/e9c4c2d2e5c9c9d2a88c53d4e0a1b7c4" method="POST">
+                        <!-- FormSubmit.co Configuration -->
+                        <input type="hidden" name="_subject" value="New contact form submission from your portfolio">
+                        <input type="hidden" name="_template" value="table">
+                        <input type="hidden" name="_captcha" value="true">
+                        <input type="hidden" name="_autoresponse" value="Thank you for your message! I will get back to you soon.">
+                        <input type="hidden" name="_next" value="thank-you.html">
+                        
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                            <span class="form-hint">Please enter a valid name</span>
                         </div>
                         <div class="form-group">
-                            <input type="email" id="email" name="email" placeholder="Email" required>
-                            <div class="error-message" id="emailError"></div>
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                            <span class="form-hint">Please enter a valid email address</span>
                         </div>
                         <div class="form-group">
-                            <textarea id="message" name="message" placeholder="Message" required></textarea>
-                            <div class="error-message" id="messageError"></div>
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+250 7XX XXX XXX" required>
+                            <span class="form-hint">Format: +250 7XX XXX XXX</span>
                         </div>
-                        <button type="submit" class="submit-btn">Submit</button>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" placeholder="Enter message subject" required>
+                            <span class="form-hint">Please enter a subject</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Enter your message" required></textarea>
+                            <span class="form-hint">Message should be at least 10 characters</span>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
                     </form>
-                    <div class="success-popup" id="successPopup">
-                        <div class="success-popup-content">
-                            <i class="fas fa-check-circle"></i>
-                            <h3>Thank You!</h3>
-                            <p>Your message has been sent successfully.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
     <section class="third_section">
-        <footer class="container">
+        <footer>
             <p>2025 All Rights Reserved By Janviere Munezero</p>
         </footer>
     </section>
+
+    <div id="successMessage" class="success-message">
+        Message sent successfully!
+    </div>
+
+    <div id="errorNotification" class="error-notification">
+        <h3>Please fix the following errors:</h3>
+        <ul class="error-list" id="errorList"></ul>
+    </div>
+
+    <script>
+        // Validation rules and messages
+        const validationRules = {
+            name: {
+                required: true,
+                minLength: 2,
+                pattern: /^[A-Za-z\s]+$/,
+                messages: {
+                    required: 'Name is required',
+                    minLength: 'Name must be at least 2 characters long',
+                    pattern: 'Name should only contain letters and spaces'
+                }
+            },
+            email: {
+                required: true,
+                pattern: /\b[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)?@[a-zA-Z0-9.-]+\.(?:com|co\.uk|edu|org|net)\b/,
+                messages: {
+                    required: 'Email is required',
+                    pattern: 'Please enter a valid email address'
+                }
+            },
+            phone: {
+                required: true,
+                pattern: /^\+250\s?7[0-9]{2}\s?[0-9]{3}\s?[0-9]{3}$/,
+                messages: {
+                    required: 'Phone number is required',
+                    pattern: 'Format: +250 7XX XXX XXX'
+                }
+            },
+            subject: {
+                required: true,
+                minLength: 3,
+                messages: {
+                    required: 'Subject is required',
+                    minLength: 'Subject must be at least 3 characters long'
+                }
+            },
+            message: {
+                required: true,
+                minLength: 10,
+                messages: {
+                    required: 'Message is required',
+                    minLength: 'Message must be at least 10 characters long'
+                }
+            },
+            // Add social media URL validation
+            socialMedia: {
+                github: /^https:\/\/github\.com\/[\w-]+$/,
+                instagram: /^https:\/\/www\.instagram\.com\/[\w\._]+$/,
+                linkedin: /^https:\/\/www\.linkedin\.com\/in\/[\w-]+/,
+                messages: {
+                    invalid: 'Invalid social media URL format'
+                }
+            }
+        };
+
+        // Validate a single field without showing errors
+        function validateFieldSilent(field) {
+            const value = field.value.trim();
+            const rules = validationRules[field.id];
+            
+            if (!rules) return true;
+
+            // Check required
+            if (rules.required && !value) {
+                return false;
+            }
+
+            // Check minLength
+            if (rules.minLength && value.length < rules.minLength) {
+                return false;
+            }
+
+            // Check pattern
+            if (rules.pattern && !rules.pattern.test(value)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        // Show field error
+        function showFieldError(field, message) {
+            const formGroup = field.parentElement;
+            const hint = formGroup.querySelector('.form-hint');
+            
+            field.classList.add('error');
+            field.classList.remove('valid');
+            formGroup.classList.add('error');
+            
+            if (hint) {
+                hint.textContent = message;
+                hint.style.opacity = '1';
+                hint.style.visibility = 'visible';
+            }
+        }
+
+        // Clear field error
+        function clearFieldError(field) {
+            const formGroup = field.parentElement;
+            const hint = formGroup.querySelector('.form-hint');
+            
+            field.classList.remove('error', 'valid');
+            formGroup.classList.remove('error');
+            
+            if (hint) {
+                // Restore original hint text
+                if (field.id === 'phone') {
+                    hint.textContent = 'Format: +250 7XX XXX XXX';
+                }
+                hint.style.opacity = '0';
+                hint.style.visibility = 'hidden';
+            }
+        }
+
+        // Format phone number as user types
+        function formatPhoneNumber(value, oldValue, cursorPosition) {
+            // Remove all non-digits but keep track of cursor
+            let digits = value.replace(/\D/g, '');
+            
+            // Add Rwanda country code if not present
+            if (!value.includes('+250') && digits.length > 0) {
+                digits = '250' + digits;
+            }
+            
+            // Limit to Rwanda phone number length (12 digits including country code)
+            digits = digits.slice(0, 12);
+            let formattedValue = digits;
+            let newCursorPosition = cursorPosition;
+
+            // Format as +250 7XX XXX XXX
+            if (digits.length > 0) {
+                formattedValue = '+' + digits.slice(0, 3);
+                if (cursorPosition > 3) newCursorPosition++;
+            }
+            if (digits.length > 3) {
+                formattedValue += ' ' + digits.slice(3, 4);
+                if (cursorPosition > 4) newCursorPosition++;
+            }
+            if (digits.length > 4) {
+                formattedValue += digits.slice(4, 6);
+            }
+            if (digits.length > 6) {
+                formattedValue += ' ' + digits.slice(6, 9);
+                if (cursorPosition > 7) newCursorPosition++;
+            }
+            if (digits.length > 9) {
+                formattedValue += ' ' + digits.slice(9);
+                if (cursorPosition > 11) newCursorPosition++;
+            }
+
+            // If deleting characters, adjust cursor position
+            if (value.length < oldValue.length) {
+                if (oldValue.charAt(cursorPosition) === ' ') {
+                    newCursorPosition--;
+                }
+            }
+
+            return {
+                value: formattedValue,
+                cursorPosition: Math.min(newCursorPosition, formattedValue.length)
+            };
+        }
+
+        // Function to validate social media URLs
+        function validateSocialMediaLinks() {
+            const socialLinks = document.querySelectorAll('.social-icon');
+            
+            socialLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === '#' || !href) {
+                    console.warn('Social media link is empty or invalid:', link);
+                    link.style.opacity = '0.5';
+                    link.style.cursor = 'not-allowed';
+                    link.addEventListener('click', (e) => {
+                        if (href === '#' || !href) {
+                            e.preventDefault();
+                            console.warn('Social media link is not yet configured');
+                        }
+                    });
+                } else {
+                    // Validate URL format based on platform
+                    let isValid = false;
+                    if (href.includes('github.com')) {
+                        isValid = validationRules.socialMedia.github.test(href);
+                    } else if (href.includes('instagram.com')) {
+                        isValid = validationRules.socialMedia.instagram.test(href);
+                    } else if (href.includes('linkedin.com')) {
+                        isValid = validationRules.socialMedia.linkedin.test(href);
+                    }
+
+                    if (!isValid) {
+                        console.warn('Invalid social media URL format:', href);
+                        link.style.opacity = '0.5';
+                        link.style.cursor = 'not-allowed';
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            console.warn('Invalid social media URL format');
+                        });
+                    }
+                }
+            });
+        }
+
+        // Initialize form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('contactForm');
+            const formInputs = form.querySelectorAll('input, textarea');
+            
+            // Initialize social media validation
+            validateSocialMediaLinks();
+            
+            formInputs.forEach(input => {
+                let typingTimer;
+                let isTyping = false;
+
+                // Handle input events
+                input.addEventListener('input', function() {
+                    isTyping = true;
+                    clearTimeout(typingTimer);
+                    
+                    // Clear any error states while typing
+                    clearFieldError(this);
+
+                    // Special handling for phone formatting
+                    if (this.id === 'phone') {
+                        const oldValue = this.value;
+                        const cursorPosition = this.selectionStart;
+                        const formatted = formatPhoneNumber(this.value, oldValue, cursorPosition);
+
+                        if (oldValue !== formatted.value) {
+                            this.value = formatted.value;
+                            this.setSelectionRange(formatted.cursorPosition, formatted.cursorPosition);
+                        }
+                    }
+
+                    // Set timer to validate after user stops typing
+                    typingTimer = setTimeout(() => {
+                        isTyping = false;
+                        // Only validate silently while typing
+                        if (validateFieldSilent(this)) {
+                            this.classList.add('valid');
+                        }
+                    }, 1000);
+                });
+
+                // Handle blur events (when field loses focus)
+                input.addEventListener('blur', function() {
+                    clearTimeout(typingTimer);
+                    isTyping = false;
+
+                    // Only show errors if the field has been interacted with
+                    if (this.value.trim() !== '') {
+                        const rules = validationRules[this.id];
+                        const value = this.value.trim();
+
+                        if (rules) {
+                            // Check each validation rule
+                            if (rules.required && !value) {
+                                showFieldError(this, rules.messages.required);
+                            } else if (rules.minLength && value.length < rules.minLength) {
+                                showFieldError(this, rules.messages.minLength);
+                            } else if (rules.pattern && !rules.pattern.test(value)) {
+                                showFieldError(this, rules.messages.pattern);
+                            } else {
+                                this.classList.add('valid');
+                                clearFieldError(this);
+                            }
+                        }
+                    }
+                });
+
+                // Handle focus events
+                input.addEventListener('focus', function() {
+                    // Clear error states when focusing to give clean slate
+                    clearFieldError(this);
+                });
+            });
+
+            // Handle form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const errors = [];
+                let isValid = true;
+
+                // Validate all fields
+                formInputs.forEach(input => {
+                    const rules = validationRules[input.id];
+                    const value = input.value.trim();
+
+                    if (rules) {
+                        if (rules.required && !value) {
+                            isValid = false;
+                            showFieldError(input, rules.messages.required);
+                            errors.push(rules.messages.required);
+                        } else if (rules.minLength && value.length < rules.minLength) {
+                            isValid = false;
+                            showFieldError(input, rules.messages.minLength);
+                            errors.push(rules.messages.minLength);
+                        } else if (rules.pattern && !rules.pattern.test(value)) {
+                            isValid = false;
+                            showFieldError(input, rules.messages.pattern);
+                            errors.push(rules.messages.pattern);
+                        }
+                    }
+                });
+
+                if (!isValid) {
+                    showErrors(errors);
+                    return false;
+                }
+
+                // Form is valid, proceed with submission
+                const formData = {
+                    name: form.name.value.trim(),
+                    email: form.email.value.trim(),
+                    phone: form.phone.value.trim(),
+                    subject: form.subject.value.trim(),
+                    message: form.message.value.trim()
+                };
+
+                console.log('Form submitted:', formData);
+                showSuccessMessage();
+                
+                // Reset form and validation states
+                form.reset();
+                formInputs.forEach(input => {
+                    input.classList.remove('valid', 'error');
+                    clearFieldError(input);
+                });
+                
+                return false;
+            });
+        });
+
+        function showErrors(errors) {
+            const errorNotification = document.getElementById('errorNotification');
+            const errorList = document.getElementById('errorList');
+            
+            errorList.innerHTML = '';
+            errors.forEach(error => {
+                const li = document.createElement('li');
+                li.textContent = error;
+                errorList.appendChild(li);
+            });
+            
+            errorNotification.classList.add('show');
+            setTimeout(() => {
+                errorNotification.classList.remove('show');
+            }, 5000);
+        }
+
+        function showSuccessMessage() {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.classList.add('show');
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 3000);
+        }
+
+        async function sendEmail(event) {
+            event.preventDefault();
+            
+            // Get the form and button elements
+            const form = event.target;
+            const submitBtn = form.querySelector('.submit-btn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const spinner = submitBtn.querySelector('.loading-spinner');
+            
+            // Validate all fields
+            const fields = form.querySelectorAll('input, textarea');
+            let isValid = true;
+            const errors = [];
+            
+            fields.forEach(field => {
+                if (!validateFieldSilent(field)) {
+                    isValid = false;
+                    const rules = validationRules[field.id];
+                    const message = rules.messages.required;
+                    errors.push(message);
+                }
+            });
+            
+            if (!isValid) {
+                showErrorNotification(errors);
+                return false;
+            }
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            btnText.style.opacity = '0';
+            spinner.style.display = 'block';
+            
+            try {
+                const templateParams = {
+                    from_name: form.name.value,
+                    from_email: form.email.value,
+                    phone: form.phone.value,
+                    subject: form.subject.value,
+                    message: form.message.value
+                };
+                
+                // Replace these with your actual EmailJS service ID and template ID
+                const result = await emailjs.send(
+                    'YOUR_SERVICE_ID',
+                    'YOUR_TEMPLATE_ID',
+                    templateParams
+                );
+                
+                // Show success message
+                const successMessage = document.getElementById('successMessage');
+                successMessage.classList.add('show');
+                setTimeout(() => {
+                    successMessage.classList.remove('show');
+                }, 5000);
+                
+                // Reset form
+                form.reset();
+                
+            } catch (error) {
+                console.error('Failed to send email:', error);
+                showErrorNotification(['Failed to send message. Please try again later.']);
+                
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                btnText.style.opacity = '1';
+                spinner.style.display = 'none';
+            }
+            
+            return false;
+        }
+    </script>
 </body>
 </html>

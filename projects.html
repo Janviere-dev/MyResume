@@ -7,11 +7,10 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script defer src="github-integration.js"></script>
     <script defer src="script.js"></script>
     <style>
         :root {
-            --bg-color: #1a1a1a;
+            --bg-color: #1F242D;
             --text-color: #ffffff;
             --accent-color: #00EEFF;
             --card-bg: rgba(255, 255, 255, 0.05);
@@ -64,11 +63,7 @@
         .projects-section {
             margin-top: 120px;
             padding: 0 20px;
-        }
-
-        .projects-container {
-            max-width: 1200px;
-            margin: 0 auto;
+            min-height: calc(100vh - 200px);
         }
 
         .section-title {
@@ -92,164 +87,476 @@
             width: 100%;
             height: 3px;
             background: var(--accent-color);
-            animation: shimmer 2s infinite;
-        }
-
-        .highlight {
-            color: var(--accent-color);
         }
 
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
-            margin-bottom: 3rem;
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+            padding: 20px;
         }
 
         .project-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 1.5rem;
-            border: 1px solid var(--card-border);
-            box-shadow: 0 4px 6px var(--card-shadow);
-            transition: all 0.3s ease;
+            perspective: 1500px;
+            height: 450px;
+            cursor: pointer;
+            position: relative;
+            background: transparent;
         }
 
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px var(--hover-shadow);
+        .project-card::after {
+            content: none;
+        }
+
+        .project-image-container {
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            margin-bottom: 1rem;
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-color);
+            position: relative;
+            padding: 15px;
+        }
+
+        .project-image {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover .project-image {
+            transform: scale(1.02);
+        }
+
+        .view-details-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-color);
+            color: var(--bg-color);
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            opacity: 1;
+            transition: all 0.3s ease;
+            z-index: 2;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .project-card:hover .view-details-button {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        .project-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+        }
+
+        .project-card.flipped .project-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .project-card-front,
+        .project-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .project-card-front {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card-back {
+            transform: rotateY(180deg);
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+        }
+
+        .project-info-front {
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .project-info-back {
+            padding: 2rem;
+            background: var(--card-bg);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .project-info-back::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .project-info-back::-webkit-scrollbar-track {
+            background: var(--bg-color);
+            border-radius: 4px;
+        }
+
+        .project-info-back::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        .back-to-image {
+            position: sticky;
+            top: 15px;
+            right: 15px;
+            float: right;
+            background: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 3;
+            margin-bottom: 1rem;
         }
 
         .project-title {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: var(--text-color);
-            margin-bottom: 1rem;
-            font-family: 'Montserrat', sans-serif;
+            margin: 0.5rem 0;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .project-description {
             color: var(--text-color);
-            opacity: 0.8;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-            font-family: 'Montserrat', sans-serif;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin: 1.5rem 0;
+            text-align: left;
+            opacity: 0.9;
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .project-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .project-language {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .language-icon {
-            width: 24px;
-            height: 24px;
-            filter: brightness(0) saturate(100%) invert(var(--icon-invert));
-            transition: transform 0.3s ease;
-        }
-
-        .project-card:hover .language-icon {
-            transform: scale(1.1);
-        }
-
-        .project-stats {
-            display: flex;
+        .project-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
-            color: var(--text-color);
-            opacity: 0.8;
         }
 
-        .project-links {
+        .project-features li {
+            margin: 0.5rem 0;
+            padding-left: 1.8rem;
+            position: relative;
             display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
+            align-items: center;
+            line-height: 1.4;
         }
 
-        .project-link {
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            text-decoration: none;
-            font-family: 'Montserrat', sans-serif;
-            transition: all 0.3s ease;
-            flex: 1;
+        .project-features li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .flip-icon {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            animation: bounce 2s infinite;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-5px);
+            }
+            60% {
+                transform: translateY(-3px);
+            }
+        }
+
+        .github-section {
             text-align: center;
+            margin: 4rem 0;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .view-link {
+        .github-text {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+        }
+
+        .github-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
             background: var(--accent-color);
             color: var(--bg-color);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .clone-link {
-            background: transparent;
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
+        .github-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0, 238, 255, 0.3);
         }
 
-        .project-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px var(--hover-shadow);
+        .github-icon {
+            width: 24px;
+            height: 24px;
         }
 
-        .loading-spinner {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid var(--card-border);
-            border-left-color: var(--accent-color);
-            border-radius: 50%;
-            margin: 0 auto 1rem;
-            animation: spin 1s linear infinite;
-        }
-
-        .error-message {
-            text-align: center;
-            color: #ff4444;
-            padding: 2rem;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
+        @media (max-width: 992px) {
+            .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+            .project-card {
+                height: 420px;
+            }
+            .project-image-container {
+                height: 250px;
+            }
+            .project-title {
+                font-size: 1.6rem;
+            }
         }
 
         @media (max-width: 768px) {
             .projects-grid {
                 grid-template-columns: 1fr;
+                padding: 10px;
+        }
+            .project-card {
+                height: 480px;
             }
-
-            .section-title h1 {
-                font-size: 2rem;
+            .project-image-container {
+                height: 250px;
             }
-
             .project-title {
-                font-size: 1.3rem;
+                font-size: 1.5rem;
+            }
+            .project-info-back {
+                padding: 1.5rem;
+            }
+            .project-features {
+                grid-template-columns: 1fr;
+            }
+            .view-details-button {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .project-description-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            height: 100%;
+            overflow-y: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-overview {
+            color: var(--text-color);
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            text-align: left;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 1.5rem;
+        }
+
+        .project-tech {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .features-section {
+            margin-top: 1.5rem;
+        }
+
+        .features-title {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .features-title i {
+            color: var(--accent-color);
+        }
+
+        .project-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .project-features li {
+            margin: 0.5rem 0;
+            padding-left: 1.8rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        .project-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .view-details-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .project-card:hover .view-details-overlay {
+            opacity: 1;
+        }
+
+        .view-details-button {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .view-details-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .view-details-button i {
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .project-card-back {
+                padding: 1.5rem;
+            }
+
+            .project-description-container {
+                padding: 1.5rem;
+            }
+
+            .project-overview {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .features-title {
+                font-size: 1.2rem;
+            }
+
+            .project-features li {
+                font-size: 0.95rem;
+            }
+
+            .view-details-overlay {
+                opacity: 1;
+                background: rgba(0, 0, 0, 0.5);
             }
         }
     </style>
 </head>
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()">
-        <i class="fas fa-moon"></i>
-        <span>Toggle Theme</span>
-    </button>
-
     <section class="first_section">
         <nav class="navbar container">
             <div class="logo-container">
@@ -258,6 +565,11 @@
                 </div>
                 <span class="logo-text">Janviere Munezero</span>
             </div>
+            <button class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="skills.html">Skills</a></li>
@@ -271,16 +583,142 @@
 
     <main class="projects-section">
         <div class="container">
-            <div class="title">
+            <div class="section-title">
                 <h1>My <span class="highlight">Projects</span></h1>
             </div>
-            <div class="projects-container">
-                <div id="github-projects" class="projects-grid">
-                    <div class="loading-spinner">
-                        <div class="spinner"></div>
-                        <p>Loading projects from GitHub...</p>
+            
+            <div class="projects-grid">
+                <!-- Weather App -->
+                <div class="project-card">
+                    <div class="project-card-inner">
+                        <div class="project-card-front">
+                            <div class="project-image-container">
+                                <img src="images/weather app.png" alt="Weather App" class="project-image">
+                            </div>
+                            <div class="project-info-front">
+                                <h3 class="project-title">Weather App</h3>
+                            </div>
+                        </div>
+                        <div class="project-card-back">
+                            <div class="project-description-container">
+                                <button class="back-to-image">
+                                    <i class="fas fa-arrow-left"></i> Back to Image
+                                </button>
+                                <h3 class="project-title">Weather App</h3>
+                                <div class="project-overview">
+                                    A comprehensive weather application that provides users with real-time weather information for any location worldwide. This app helps users stay informed about current weather conditions and plan their activities accordingly.
+                                    <div class="project-tech">
+                                        Technologies: HTML, CSS, JavaScript, Weather API
+                                    </div>
+                                </div>
+                                <div class="features-section">
+                                    <h4 class="features-title">
+                                        <i class="fas fa-star"></i> Key Features
+                                    </h4>
+                                    <ul class="project-features">
+                                        <li>Real-time weather updates with live data</li>
+                                        <li>Location-based weather forecasting</li>
+                                        <li>5-day weather prediction</li>
+                                        <li>Temperature, humidity, and wind details</li>
+                                        <li>Weather alerts and notifications</li>
+                                        <li>Mobile-responsive design</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Age Calculator -->
+                <div class="project-card">
+                    <div class="project-card-inner">
+                        <div class="project-card-front">
+                            <div class="project-image-container">
+                                <img src="images/age calculator.png" alt="Age Calculator" class="project-image">
+                            </div>
+                            <div class="project-info-front">
+                                <h3 class="project-title">Age Calculator</h3>
+                            </div>
+                        </div>
+                        <div class="project-card-back">
+                            <div class="project-description-container">
+                                <button class="back-to-image">
+                                    <i class="fas fa-arrow-left"></i> Back to Image
+                                </button>
+                                <h3 class="project-title">Age Calculator</h3>
+                                <div class="project-overview">
+                                    A precise age calculation tool that helps users determine exact age differences between dates. Perfect for calculating ages for legal documents, eligibility verification, or personal records.
+                                    <div class="project-tech">
+                                        Technologies: HTML, CSS, JavaScript, Date Manipulation Libraries
+                                    </div>
+                                </div>
+                                <div class="features-section">
+                                    <h4 class="features-title">
+                                        <i class="fas fa-star"></i> Key Features
+                                    </h4>
+                                    <ul class="project-features">
+                                        <li>Accurate age calculation in years, months, and days</li>
+                                        <li>User-friendly date input interface</li>
+                                        <li>Future date age prediction</li>
+                                        <li>Birthday countdown calculator</li>
+                                        <li>Automatic validation of dates</li>
+                                        <li>Responsive design for all devices</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Currency Converter -->
+                <div class="project-card">
+                    <div class="project-card-inner">
+                        <div class="project-card-front">
+                            <div class="project-image-container">
+                                <img src="images/current converter.png" alt="Currency Converter" class="project-image">
+                            </div>
+                            <div class="project-info-front">
+                                <h3 class="project-title">Currency Converter</h3>
+                            </div>
+                        </div>
+                        <div class="project-card-back">
+                            <div class="project-description-container">
+                                <button class="back-to-image">
+                                    <i class="fas fa-arrow-left"></i> Back to Image
+                                </button>
+                                <h3 class="project-title">Currency Converter</h3>
+                                <div class="project-overview">
+                                    An efficient currency conversion application that provides real-time exchange rates for multiple currencies worldwide. Essential for international transactions, travel planning, and financial calculations.
+                                    <div class="project-tech">
+                                        Technologies: HTML, CSS, JavaScript, Exchange Rate API
+                                    </div>
+                                </div>
+                                <div class="features-section">
+                                    <h4 class="features-title">
+                                        <i class="fas fa-star"></i> Key Features
+                                    </h4>
+                                    <ul class="project-features">
+                                        <li>Live exchange rate updates</li>
+                                        <li>Support for 170+ currencies</li>
+                                        <li>Historical rate comparison</li>
+                                        <li>Favorite currency pairs</li>
+                                        <li>Currency rate alerts</li>
+                                        <li>Offline mode with latest rates</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub Section -->
+            <div class="github-section">
+                <p class="github-text">Discover more of my projects on GitHub and contribute!</p>
+                <a href="https://github.com/Janviere-dev?tab=repositories" target="_blank" class="github-button">
+                    <img src="images/github-logo.png" alt="GitHub" class="github-icon">
+                    Visit My GitHub Repo
+                </a>
             </div>
         </div>
     </main>
@@ -292,94 +730,42 @@
     </section>
 
     <script>
-        // Theme toggle functionality
-        function toggleTheme() {
-            const body = document.documentElement;
-            const currentTheme = body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-
-            // Update icon
-            const icon = document.querySelector('.theme-toggle i');
-            icon.className = newTheme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
-        }
-
-        // Load saved theme
         document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            const icon = document.querySelector('.theme-toggle i');
-            icon.className = savedTheme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
-        });
-
-        // Initialize GitHub projects
-        async function initializeGitHubProjects() {
-            const projectsContainer = document.getElementById('github-projects');
-            try {
-                const projects = await window.GitHubAPI.fetchProjects();
-                
-                // Clear loading spinner
-                projectsContainer.innerHTML = '';
-                
-                if (projects.length === 0) {
-                    projectsContainer.innerHTML = `
-                        <div class="error-message">
-                            <p>No projects found.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                // Create project cards
-                projects.forEach(project => {
-                    const card = document.createElement('div');
-                    card.className = 'project-card';
-                    card.innerHTML = `
-                        <h3 class="project-title">${project.name}</h3>
-                        <p class="project-description">${project.description}</p>
-                        <div class="project-meta">
-                            <div class="project-language">
-                                <img src="${window.GitHubAPI.getLanguageIcon(project.language)}" 
-                                     alt="${project.language}" 
-                                     class="language-icon">
-                                <span>${project.language || 'Various'}</span>
-                            </div>
-                            <div class="project-stats">
-                                <span>⭐ ${project.stars}</span>
-                                <span>🔄 ${project.forks}</span>
-                            </div>
-                        </div>
-                        <div class="project-links">
-                            <a href="${project.url}" target="_blank" class="project-link view-link">View Project</a>
-                            <a href="${project.url}.git" class="project-link clone-link" 
-                               onclick="copyCloneUrl('${project.url}.git')">Clone Project</a>
-                        </div>
-                    `;
-                    projectsContainer.appendChild(card);
+            const projectCards = document.querySelectorAll('.project-card');
+            
+            projectCards.forEach(card => {
+                // Click on image container to flip
+                const imageContainer = card.querySelector('.project-image-container');
+                imageContainer.addEventListener('click', () => {
+                    card.classList.add('flipped');
                 });
-            } catch (error) {
-                projectsContainer.innerHTML = `
-                    <div class="error-message">
-                        <p>Error loading projects. Please try again later.</p>
-                        <p class="error-details">${error.message}</p>
-                    </div>
-                `;
+
+                // Click on back button to flip back
+                const backButton = card.querySelector('.back-to-image');
+                backButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    card.classList.remove('flipped');
+                });
+
+                // Keyboard navigation
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        if (!card.classList.contains('flipped')) {
+                            card.classList.add('flipped');
             }
         }
+                });
 
-        // Function to copy clone URL to clipboard
-        function copyCloneUrl(url) {
-            navigator.clipboard.writeText(url).then(() => {
-                alert('Clone URL copied to clipboard!');
-            }).catch(err => {
-                console.error('Failed to copy URL:', err);
-                alert('Failed to copy URL. Please try again.');
+                // Escape key to flip back
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && card.classList.contains('flipped')) {
+                        card.classList.remove('flipped');
+                    }
             });
-        }
-
-        // Initialize projects when page loads
-        initializeGitHubProjects();
+            });
+        });
     </script>
 </body>
 </html>

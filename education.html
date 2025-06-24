@@ -10,7 +10,7 @@
     <script defer src="script.js"></script>
     <style>
         :root {
-            --bg-color: #1a1a1a;
+            --bg-color: #1F242D;
             --text-color: #ffffff;
             --accent-color: #00EEFF;
             --card-bg: rgba(255, 255, 255, 0.05);
@@ -343,6 +343,11 @@
                 </div>
                 <span class="logo-text">Janviere Munezero</span>
             </div>
+            <button class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="skills.html">Skills</a></li>
@@ -355,10 +360,40 @@
     </section>
 
     <main class="education-page">
+        <!-- Main Title -->
         <div class="container">
-            <div class="title">
+            <div class="title main-title">
                 <h1>My <span class="highlight">Education</span></h1>
             </div>
+        </div>
+
+        <!-- About Educational Journey Section -->
+        <div class="profile-section">
+            <div class="profile-container">
+                <div class="profile-image-container">
+                    <img src="images/IMG_20240909_160200_1.jpg" alt="Janviere Munezero" class="profile-image">
+                </div>
+                <div class="profile-content">
+                    <h2 class="profile-title">About My Educational Journey</h2>
+                    <p class="profile-subtitle">Passionate Software Engineer and Educator</p>
+                    <p class="profile-description">
+                        As a software engineering student at African Leadership University, I blend my technical expertise 
+                        with a passion for education. My journey encompasses both frontend and backend development, 
+                        allowing me to create comprehensive solutions while sharing knowledge with others.
+                    </p>
+                    <div class="profile-tags">
+                        <span class="profile-tag">Frontend Developer</span>
+                        <span class="profile-tag">Backend Developer</span>
+                        <span class="profile-tag">Teacher</span>
+                        <span class="profile-tag">Problem Solver</span>
+                        <span class="profile-tag">Continuous Learner</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education Sections -->
+        <div class="container">
             <div class="education-container">
                 <div class="education-tabs">
                     <button class="tab-button active" onclick="showTab('education')">
@@ -465,30 +500,6 @@
             </div>
         </div>
     </main>
-
-    <div class="profile-section">
-        <div class="profile-container">
-            <div class="profile-image-container">
-                <img src="images/IMG_20240909_160200_1.jpg" alt="Janviere Munezero" class="profile-image">
-            </div>
-            <div class="profile-content">
-                <h2 class="profile-title">About My Journey</h2>
-                <p class="profile-subtitle">Passionate Software Engineer & Educator</p>
-                <p class="profile-description">
-                    As a software engineering student at African Leadership University, I blend my technical expertise 
-                    with a passion for education. My journey encompasses both frontend and backend development, 
-                    allowing me to create comprehensive solutions while sharing knowledge with others.
-                </p>
-                <div class="profile-tags">
-                    <span class="profile-tag">Frontend Developer</span>
-                    <span class="profile-tag">Backend Developer</span>
-                    <span class="profile-tag">Teacher</span>
-                    <span class="profile-tag">Problem Solver</span>
-                    <span class="profile-tag">Continuous Learner</span>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <section class="third_section">
         <footer class="container">
