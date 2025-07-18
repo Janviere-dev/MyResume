@@ -64,7 +64,7 @@ MyResume/
 ## Setup and Installation
 1. Clone the repository
 2. No build process required - this is a static website
-3. Open `index.html` in your web browser to view the site
+3. Open `index.html` in your web browser to view the site or use this link https://janviere-dev.github.io/MyResume/contact.html#contactForm
 
 ## Browser Compatibility
 - Chrome (recommended)
