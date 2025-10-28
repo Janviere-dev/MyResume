@@ -1,7 +1,7 @@
 # Personal Resume Website
 
 ## Overview
-This is a modern, interactive personal resume website showcasing my professional skills, education, experience, and projects. The website features a clean, responsive design and interactive project cards.
+This is a modern, interactive personal resume website showcasing my professional skills, education, experience, and projects. The website features a clean, responsive design and interactive project cards...
 
 ## Features
 - **Responsive Design**: Fully responsive layout that works on desktop, tablet, and mobile devices
